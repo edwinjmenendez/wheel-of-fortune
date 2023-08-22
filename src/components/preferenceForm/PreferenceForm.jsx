@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import './PreferenceForm.css'; // Import your CSS file for styling
 
 const PreferenceForm = () => {
@@ -6,10 +7,26 @@ const PreferenceForm = () => {
     const [foodCraving, setFoodCraving] = useState('');
     const [locationPreference, setLocationPreference] = useState('');
     const [budget, setBudget] = useState('');
+    const [suggestions, setSuggestions] = useState([]);
 
-    const handleFoodCravingChange = (event) => {
-        setFoodCraving(event.target.value);
+    const handleFoodCravingChange = async (event) => {
+        const newValue = event.target.value;
+        setFoodCraving(newValue);
+
+        if (newValue.length >= 3) {
+            try {
+                const response = await axios.get(' http://localhost:3001/yelp/autocomplete', {
+                    params: { text: newValue },
+                });
+                setSuggestions(response.data.terms.map(term => term.text));
+            } catch (error) {
+                console.error('Error fetching suggestions:', error);
+            }
+        } else {
+            setSuggestions([]);
+        }
     };
+
 
     const handleLocationPreferenceChange = (event) => {
         setLocationPreference(event.target.value);
@@ -51,16 +68,14 @@ const PreferenceForm = () => {
                     />
                     <button type='button' onClick={addFood} className='enterFoodButton' id='foodCraving' >Enter food</button>
                 </div>
-                <div className='foodListContainer'>
-                    {allFoods.map((food, i) => (
-                        <p
-                            onClick={() => {
-                                const newFoods =  allFoods.filter(foodItem => food !== foodItem)
-                                setAllFoods(newFoods);
-                            }}
-                            key={`${i}${food}`} >{food}</p>
-                    ))}
+                <div className='suggestionsContainer'>
+                    <ul className='suggestionsList'>
+                        {suggestions.map((suggestion, index) => (
+                            <li key={index}>{suggestion}</li>
+                        ))}
+                    </ul>
                 </div>
+
 
                 <label htmlFor="locationPreference">What is your location preference?</label>
                 <input
