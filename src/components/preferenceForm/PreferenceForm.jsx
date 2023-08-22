@@ -3,7 +3,7 @@ import axios from 'axios';
 import './PreferenceForm.css'; // Import your CSS file for styling
 
 const PreferenceForm = () => {
-    const [allFoods, setAllFoods] = useState(['hello', 'world', 'narrator', 'is', 'here']);
+    const [allFoods, setAllFoods] = useState([]);
     const [foodCraving, setFoodCraving] = useState('');
     const [locationPreference, setLocationPreference] = useState('');
     const [budget, setBudget] = useState('');
@@ -43,6 +43,11 @@ const PreferenceForm = () => {
         setFoodCraving('');
     }
 
+    const handleSuggestions = (suggestion) => {
+        setFoodCraving(suggestion);
+        setSuggestions([]);
+    }
+
     const handleSubmit = (event) => {
         event.preventDefault();
         if (allFoods.length > 1 && locationPreference) {
@@ -71,11 +76,24 @@ const PreferenceForm = () => {
                 <div className='suggestionsContainer'>
                     <ul className='suggestionsList'>
                         {suggestions.map((suggestion, index) => (
-                            <li key={index}>{suggestion}</li>
+                            <li
+                                key={`${index}suggestion`}
+                                onClick={() => handleSuggestions(suggestion)}
+                                >{suggestion}</li>
                         ))}
                     </ul>
                 </div>
 
+                <div className='foodListContainer'>
+                    {allFoods.map((food, i) => (
+                        <p
+                            onClick={() => {
+                                const newFoods = allFoods.filter(foodItem => food !== foodItem)
+                                setAllFoods(newFoods);
+                            }}
+                            key={`${i}${food}`} >{food}</p>
+                    ))}
+                </div>
 
                 <label htmlFor="locationPreference">What is your location preference?</label>
                 <input
