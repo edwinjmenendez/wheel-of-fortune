@@ -1,0 +1,21 @@
+/* Wheel.css */
+
+.wheel-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+
+  #wheel {
+    width: 0px;
+    border: 1px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #canvas {
+    /* width: 300px; */
+  }
