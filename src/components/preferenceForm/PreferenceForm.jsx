@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './PreferenceForm.css'; // Import your CSS file for styling
 
 const PreferenceForm = () => {
     const [allFoods, setAllFoods] = useState([]);
     const [foodCraving, setFoodCraving] = useState('');
-    const [locationPreference, setLocationPreference] = useState('');
+    const [location, setLocation] = useState({ lat: '', long: '' });
     const [budget, setBudget] = useState('');
     const [suggestions, setSuggestions] = useState([]);
+    const [locSuggestions, setLocSuggestions] = useState([]);
 
     const handleFoodCravingChange = async (event) => {
         const newValue = event.target.value;
@@ -16,7 +17,10 @@ const PreferenceForm = () => {
         if (newValue.length >= 3) {
             try {
                 const response = await axios.get(' http://localhost:3001/yelp/autocomplete', {
-                    params: { text: newValue },
+                    params: {
+                        text: newValue,
+                        categories: 'food'
+                    },
                 });
                 setSuggestions(response.data.terms.map(term => term.text));
             } catch (error) {
@@ -28,12 +32,12 @@ const PreferenceForm = () => {
     };
 
 
-    const handleLocationPreferenceChange = (event) => {
-        setLocationPreference(event.target.value);
-    };
-
     const handleBudgetChange = (event) => {
-        setBudget(event.target.value);
+        if (event.target.value === '$') setBudget(1);
+        else if (event.target.value === '$$') setBudget(2);
+        else if (event.target.value === '$$$') setBudget(3);
+        else if (event.target.value === '$$$$') setBudget(4);
+        else setBudget(event.target.value);
     };
 
     const addFood = () => {
@@ -48,10 +52,10 @@ const PreferenceForm = () => {
         setSuggestions([]);
     }
 
+
     const handleSubmit = (event) => {
         event.preventDefault();
-        if (allFoods.length > 1 && locationPreference) {
-            console.log('Location Preference:', locationPreference);
+        if (allFoods.length > 1 && budget) {
             console.log('Budget:', budget);
             console.log('all foods:', allFoods);
         } else {
@@ -59,17 +63,37 @@ const PreferenceForm = () => {
         }
     };
 
+
+    const getLocation = () => {
+        navigator.geolocation.getCurrentPosition((posititon) => {
+            let lat = posititon.coords.latitude;
+            let long = posititon.coords.longitude;
+
+            setLocation({
+                lat,
+                long,
+            })
+        })
+    }
+
+    // useEffect(() => {
+    //     console.log(location)
+    // }, [location])
+    
+
     return (
         <div className="form-container">
             <h2>Food Craving Form</h2>
             <form onSubmit={handleSubmit}>
-                <label htmlFor="foodCraving">What foods are you craving?</label>
+                <label htmlFor="foodCraving">What foods are you craving? (Type at LEAST 2 foods)</label>
                 <div className='foodCravingInputandButton' >
                     <input
                         type="text"
                         id="foodCraving"
                         value={foodCraving}
                         onChange={handleFoodCravingChange}
+                        autoComplete='off'
+                        disabled={allFoods.length > 4 ? true : false}
                     />
                     <button type='button' onClick={addFood} className='enterFoodButton' id='foodCraving' >Enter food</button>
                 </div>
@@ -79,7 +103,7 @@ const PreferenceForm = () => {
                             <li
                                 key={`${index}suggestion`}
                                 onClick={() => handleSuggestions(suggestion)}
-                                >{suggestion}</li>
+                            >{suggestion}</li>
                         ))}
                     </ul>
                 </div>
@@ -95,14 +119,6 @@ const PreferenceForm = () => {
                     ))}
                 </div>
 
-                <label htmlFor="locationPreference">What is your location preference?</label>
-                <input
-                    type="text"
-                    id="locationPreference"
-                    value={locationPreference}
-                    onChange={handleLocationPreferenceChange}
-                />
-
                 <label htmlFor="budget">How much do you want to spend?</label>
                 <select id="budget" value={budget} onChange={handleBudgetChange}>
                     <option value="">Select budget</option>
@@ -112,6 +128,8 @@ const PreferenceForm = () => {
                     <option value="$$$$">$$$$</option>
                 </select>
 
+                <button onClick={getLocation} type="button">get location: </button>
+                <p>Long: {location.long} Lat: {location.lat}</p>
                 <button type="submit">Submit</button>
             </form>
         </div>
