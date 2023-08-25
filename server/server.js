@@ -25,7 +25,7 @@ app.get('/yelp/autocomplete', async (req, res) => {
 
 app.get('/yelp/autocomplete/locations', async (req, res) => {
   try {
-    const response = await axios.get(`${YELP_API_URL}/locations`, {
+    const response = await axios.get(`${YELP_API_URL}/location`, {
       headers: {
         Authorization: `Bearer bbn-En5Rz60M8L_SbdNHSEWeHBS3En1cHkBwoG6ZprRstpBP5-BcM_eu-Uf8Cp6bkiL9K3LDFt30fveMOOLdwVHZVbv5AYlHjLVwUH1KjdLY9rYg0qe4WsdSjSrkZHYx`, // Replace with your Yelp API key
       },

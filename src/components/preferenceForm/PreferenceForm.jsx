@@ -5,10 +5,13 @@ import './PreferenceForm.css'; // Import your CSS file for styling
 const PreferenceForm = () => {
     const [allFoods, setAllFoods] = useState([]);
     const [foodCraving, setFoodCraving] = useState('');
-    const [location, setLocation] = useState({ lat: '', long: '' });
     const [budget, setBudget] = useState('');
     const [suggestions, setSuggestions] = useState([]);
-    const [locSuggestions, setLocSuggestions] = useState([]);
+    const [allData, setAllData] = useState({
+        allFoods,
+        budget,
+        location
+    })
 
     const handleFoodCravingChange = async (event) => {
         const newValue = event.target.value;
@@ -19,9 +22,11 @@ const PreferenceForm = () => {
                 const response = await axios.get(' http://localhost:3001/yelp/autocomplete', {
                     params: {
                         text: newValue,
-                        categories: 'food'
+                        latitude: location.lat,
+                        longitude: location.long
                     },
                 });
+                console.log(response)
                 setSuggestions(response.data.terms.map(term => term.text));
             } catch (error) {
                 console.error('Error fetching suggestions:', error);
@@ -33,11 +38,12 @@ const PreferenceForm = () => {
 
 
     const handleBudgetChange = (event) => {
-        if (event.target.value === '$') setBudget(1);
-        else if (event.target.value === '$$') setBudget(2);
-        else if (event.target.value === '$$$') setBudget(3);
-        else if (event.target.value === '$$$$') setBudget(4);
+        if (event.target.value === '$') setBudget({ price: 1, value: event.target.value });
+        else if (event.target.value === '$$') setBudget({ price: 2, value: event.target.value });
+        else if (event.target.value === '$$$') setBudget({ price: 3, value: event.target.value });
+        else if (event.target.value === '$$$$') setBudget({ price: 4, value: event.target.value });
         else setBudget(event.target.value);
+        console.log(budget)
     };
 
     const addFood = () => {
@@ -53,33 +59,53 @@ const PreferenceForm = () => {
     }
 
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        if (allFoods.length > 1 && budget) {
-            console.log('Budget:', budget);
-            console.log('all foods:', allFoods);
-        } else {
-            alert('Fill out required fields')
+        try {
+            await handleGetLocation();
+            if (allFoods.length > 1 && budget) {
+                setAllData(prevData => ({
+                    ...prevData,
+                    allFoods,
+                    budget
+                }));
+                
+            } else {
+                alert('Fill out required fields')
+            }
+        } catch (error) {
+            console.error({error})  
         }
     };
 
+    useEffect(() => {
+        console.log(location)
+        console.log(allData)
+    }, [allData])
 
-    const getLocation = () => {
-        navigator.geolocation.getCurrentPosition((posititon) => {
-            let lat = posititon.coords.latitude;
-            let long = posititon.coords.longitude;
+    const getLocation = () => new Promise((resolve, reject) =>
+        navigator.geolocation.getCurrentPosition(resolve, reject)
+    );
 
-            setLocation({
-                lat,
-                long,
-            })
-        })
-    }
+    // Usage
+    const handleGetLocation = async () => {
+        try {
+            const position = await getLocation();
+            const { latitude: lat, longitude: long } = position.coords;
+            console.log('Location:', { lat, long });
+            setAllData(prevData => ({
+                ...prevData,
+                location: {
+                    lat,
+                    long
+                }
+            }));
+            
+        } catch (error) {
+            console.error('Error getting location:', error);
+        }
+    };
 
-    // useEffect(() => {
-    //     console.log(location)
-    // }, [location])
-    
 
     return (
         <div className="form-container">
@@ -120,16 +146,14 @@ const PreferenceForm = () => {
                 </div>
 
                 <label htmlFor="budget">How much do you want to spend?</label>
-                <select id="budget" value={budget} onChange={handleBudgetChange}>
+                <select id="budget" value={budget.value} onChange={handleBudgetChange}>
                     <option value="">Select budget</option>
                     <option value="$">$</option>
                     <option value="$$">$$</option>
                     <option value="$$$">$$$</option>
                     <option value="$$$$">$$$$</option>
                 </select>
-
-                <button onClick={getLocation} type="button">get location: </button>
-                <p>Long: {location.long} Lat: {location.lat}</p>
+                <p>Long: {allData.location.long} Lat: {allData.location.lat}</p>
                 <button type="submit">Submit</button>
             </form>
         </div>
