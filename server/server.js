@@ -1,18 +1,19 @@
 const express = require('express');
 const axios = require('axios');
-const cors = require('cors')
+const cors = require('cors');
+require('dotenv').config();
 const app = express();
 
 const YELP_API_URL = 'https://api.yelp.com/v3/autocomplete';
-
+const YELP_API_URL2 = 'https://api.yelp.com/v3/businesses/search?';
 app.use(express.json());
 app.use(cors())
 // Proxy route
-app.get('/yelp/autocomplete', async (req, res) => {
+app.get('/autocomplete', async (req, res) => {
   try {
     const response = await axios.get(YELP_API_URL, {
       headers: {
-        Authorization: `Bearer bbn-En5Rz60M8L_SbdNHSEWeHBS3En1cHkBwoG6ZprRstpBP5-BcM_eu-Uf8Cp6bkiL9K3LDFt30fveMOOLdwVHZVbv5AYlHjLVwUH1KjdLY9rYg0qe4WsdSjSrkZHYx`, // Replace with your Yelp API key
+        Authorization: `Bearer ${process.env.YELP_API_KEY}`, // Replace with your Yelp API key
       },
       params: req.query, // Pass query parameters to Yelp API
     });
@@ -23,11 +24,11 @@ app.get('/yelp/autocomplete', async (req, res) => {
   }
 });
 
-app.get('/yelp/autocomplete/locations', async (req, res) => {
+app.get('/results', async (req, res) => {
   try {
-    const response = await axios.get(`${YELP_API_URL}/location`, {
+    const response = await axios.get(`${YELP_API_URL2}/`, {
       headers: {
-        Authorization: `Bearer bbn-En5Rz60M8L_SbdNHSEWeHBS3En1cHkBwoG6ZprRstpBP5-BcM_eu-Uf8Cp6bkiL9K3LDFt30fveMOOLdwVHZVbv5AYlHjLVwUH1KjdLY9rYg0qe4WsdSjSrkZHYx`, // Replace with your Yelp API key
+        Authorization: `Bearer ${process.env.YELP_API_KEY}`, // Replace with your Yelp API key
       },
       params: req.query, // Pass query parameters to Yelp API
     });
