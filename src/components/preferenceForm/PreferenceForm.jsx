@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios, { all } from 'axios';
 import './PreferenceForm.css'; // Import your CSS file for styling
+import { Link, useNavigate, } from 'react-router-dom';
 
-const PreferenceForm = () => {
+const PreferenceForm = ({ setFoodData }) => {
+
+    const navigate = useNavigate();
+
     const [allFoods, setAllFoods] = useState([]);
     const [foodCraving, setFoodCraving] = useState('');
     const [budget, setBudget] = useState('');
     const [suggestions, setSuggestions] = useState([]);
-    const [allData, setAllData] = useState({
-        allFoods,
-        budget,
-        location
-    })
 
     const handleFoodCravingChange = async (event) => {
         const newValue = event.target.value;
@@ -19,14 +18,11 @@ const PreferenceForm = () => {
 
         if (newValue.length >= 3) {
             try {
-                const response = await axios.get(' http://localhost:3001/yelp/autocomplete', {
+                const response = await axios.get(' http://localhost:3001/autocomplete', {
                     params: {
                         text: newValue,
-                        latitude: location.lat,
-                        longitude: location.long
                     },
                 });
-                console.log(response)
                 setSuggestions(response.data.terms.map(term => term.text));
             } catch (error) {
                 console.error('Error fetching suggestions:', error);
@@ -43,7 +39,6 @@ const PreferenceForm = () => {
         else if (event.target.value === '$$$') setBudget({ price: 3, value: event.target.value });
         else if (event.target.value === '$$$$') setBudget({ price: 4, value: event.target.value });
         else setBudget(event.target.value);
-        console.log(budget)
     };
 
     const addFood = () => {
@@ -64,12 +59,12 @@ const PreferenceForm = () => {
         try {
             await handleGetLocation();
             if (allFoods.length > 1 && budget) {
-                setAllData(prevData => ({
+                setFoodData(prevData => ({
                     ...prevData,
                     allFoods,
                     budget
                 }));
-                
+                navigate('wheel')
             } else {
                 alert('Fill out required fields')
             }
@@ -77,11 +72,6 @@ const PreferenceForm = () => {
             console.error({error})  
         }
     };
-
-    useEffect(() => {
-        console.log(location)
-        console.log(allData)
-    }, [allData])
 
     const getLocation = () => new Promise((resolve, reject) =>
         navigator.geolocation.getCurrentPosition(resolve, reject)
@@ -92,8 +82,7 @@ const PreferenceForm = () => {
         try {
             const position = await getLocation();
             const { latitude: lat, longitude: long } = position.coords;
-            console.log('Location:', { lat, long });
-            setAllData(prevData => ({
+            setFoodData(prevData => ({
                 ...prevData,
                 location: {
                     lat,
@@ -105,7 +94,6 @@ const PreferenceForm = () => {
             console.error('Error getting location:', error);
         }
     };
-
 
     return (
         <div className="form-container">
@@ -145,7 +133,7 @@ const PreferenceForm = () => {
                     ))}
                 </div>
 
-                <label htmlFor="budget">How much do you want to spend?</label>
+                <label className='budgetLabel' htmlFor="budget">How much do you want to spend?</label>
                 <select id="budget" value={budget.value} onChange={handleBudgetChange}>
                     <option value="">Select budget</option>
                     <option value="$">$</option>
@@ -153,8 +141,7 @@ const PreferenceForm = () => {
                     <option value="$$$">$$$</option>
                     <option value="$$$$">$$$$</option>
                 </select>
-                <p>Long: {allData.location.long} Lat: {allData.location.lat}</p>
-                <button type="submit">Submit</button>
+                    <button type="submit">Submit</button>
             </form>
         </div>
     );
