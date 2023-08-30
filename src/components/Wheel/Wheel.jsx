@@ -1,57 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import WheelComponent from 'react-wheel-of-prizes'
 import './Wheel.css'
+import { useNavigate } from 'react-router-dom';
 
-const Wheel = () => {
-    const segments = [
-        'Sushi',
-        'Pizza',
-        'Burgers',
-        'Italian',
-        'pasta',
-        'beer',
-        'bars',
-        'poke'
-    ];
+const Wheel = ({ foodData, setFoodSelection }) => {
+    
+    const navigate = useNavigate();
+
     const segColors = [
         '#EE4040',
         '#F0CF50',
         '#815CD1',
         '#3DA5E0',
-        '#34A24F',
-        '#F9AA1F',
-        '#EC3F3F',
-        '#FF9000'
+        '#34A24F'
     ];
 
     // Initialize the answer state with a default value
     const [answer, setAnswer] = useState('');
     const [hasSpun, setHasSpun] = useState(false);
 
-    const onFinished = (winner) => {
-        // Calculate the random index and winner
-        const randomIndex = Math.floor(Math.random() * segments.length);
-        const randomWinner = segments[randomIndex];
-        
+    const onFinished = (winner) => {        
         // Update the answer state with the randomWinner
         setAnswer(winner);
-
-        // Logs might not show the updated value immediately due to asynchronous state update
-        console.log('Current answer:', answer); // May show the previous value
-        console.log('Random winner:', randomWinner); // Should show the correct random winner
-        console.log('winner:', winner); // Should show the correct random winner
         setHasSpun(true);
+        setFoodSelection({
+            food: winner,
+            location: foodData.location,
+            budget: foodData.budget
+        })
         return winner; // Return the winner to the WheelComponent
     };
 
+    const handleClick = () => {
+        navigate('/foodlist');
+    }
+
     useEffect(() => {
-        console.log('Updated answer in useEffect:', answer);
-    }, [answer]);
+        console.log('hasspun in useEffect:', hasSpun);
+    }, [hasSpun]);
 
     return (
         <div className='wheel-container'>
             <WheelComponent
-                segments={segments}
+                segments={foodData.allFoods}
                 segColors={segColors}
                 winningSegment={answer}
                 onFinished={(winner) => onFinished(winner)}
@@ -64,7 +55,10 @@ const Wheel = () => {
                 downDuration={1000}
                 fontFamily='Arial'
             />
-            <p>Current answer: {answer}</p>
+            {hasSpun && <button
+                onClick={handleClick}>
+                See Results
+            </button>}
         </div>
     );
 };
