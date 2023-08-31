@@ -1,68 +1,10 @@
-/* body {
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500&display=swap');
+body {
     margin: 0;
-    font-family: sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+    font-family: 'Nunito', sans-serif;
     background-color: #f0f0f0;
+    background-image: url("assets/bacvkground-image.jpeg");
+    background-size: cover; /* Ensure the background image covers the entire viewport */
+    background-repeat: repeat; /* Repeat the pattern */
   }
   
-  .app {
-    text-align: center;
-  }
-  
-  .wheel-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .wheel {
-    position: relative;
-    width: 300px;
-    height: 300px;
-    border-radius: 50%;
-    background: #f0f0f0;
-    overflow: hidden;
-    transform: rotate(0deg);
-    transition: transform 4s cubic-bezier(0.46, 0.03, 0.52, 0.96);
-  }
-  
-  .slice {
-    position: absolute;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 150px 150px 0;
-    border-color: transparent transparent transparent transparent;
-    transform-origin: 50% 100%;
-  }
-  
-  .slice:nth-child(odd) {
-    background: #ff5722;
-    transform: rotate(36deg);
-  }
-  
-  .slice:nth-child(even) {
-    background: #f44336;
-    transform: rotate(72deg);
-  }
-  
-  .spin-button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: #007bff;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  
-  .result {
-    margin-top: 10px;
-    font-weight: bold;
-    color: #007bff;
-  }
-   */
