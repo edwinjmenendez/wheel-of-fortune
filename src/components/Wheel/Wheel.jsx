@@ -4,7 +4,7 @@ import './Wheel.css'
 import { useNavigate } from 'react-router-dom';
 
 const Wheel = ({ foodData, setFoodSelection }) => {
-    
+
     const navigate = useNavigate();
 
     const segColors = [
@@ -19,16 +19,20 @@ const Wheel = ({ foodData, setFoodSelection }) => {
     const [answer, setAnswer] = useState('');
     const [hasSpun, setHasSpun] = useState(false);
 
-    const onFinished = (winner) => {        
-        // Update the answer state with the randomWinner
+    const onFinished = (winner) => {
         setAnswer(winner);
         setHasSpun(true);
         setFoodSelection({
             food: winner,
             location: foodData.location,
             budget: foodData.budget
-        })
-        return winner; // Return the winner to the WheelComponent
+        });
+        localStorage.setItem('foodSelection', JSON.stringify({
+            food: winner,
+            location: foodData.location,
+            budget: foodData.budget
+        }));
+        return winner;
     };
 
     const handleClick = () => {
@@ -41,6 +45,7 @@ const Wheel = ({ foodData, setFoodSelection }) => {
 
     return (
         <div className='wheel-container'>
+            <h1>Give the Wheel a Spin</h1>
             <WheelComponent
                 segments={foodData.allFoods}
                 segColors={segColors}
@@ -50,7 +55,7 @@ const Wheel = ({ foodData, setFoodSelection }) => {
                 contrastColor='white'
                 buttonText={hasSpun ? 'No more spins' : 'Spin'}
                 isOnlyOnce={true}
-                size={200}
+                size={290}
                 upDuration={100}
                 downDuration={1000}
                 fontFamily='Arial'

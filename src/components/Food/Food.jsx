@@ -1,7 +1,19 @@
 import React from 'react';
+import StarIcon from '@mui/icons-material/Star';
 import './Food.css'; // Import your CSS file for styling
+import { makeStyles } from '@mui/styles';
+
+
+const useStyles = makeStyles(theme => ({
+  customStarColor: {
+    color: 'white',
+  },
+}));
 
 const Food = ({ business }) => {
+
+  const classes = useStyles();
+
   const {
     id,
     image_url,
@@ -16,6 +28,10 @@ const Food = ({ business }) => {
   } = business;
 
   const { address1, city, state, zip_code } = location;
+  const ratingStars = [];
+  for (let i = 0; i < 5; i++) {
+    ratingStars.push(<StarIcon color={i < Math.floor(rating) ? 'primary' : ''} className={classes.customStarColor}/>)
+  }
 
   return (
     <div className="food-container" id={id}>
@@ -26,10 +42,15 @@ const Food = ({ business }) => {
         <h2 className="food-name">
           <a href={url}>{name}</a>
         </h2>
+        <div className='review-rating-star'>
+          {ratingStars}
+          <div className='review-rating'>
+            <p className="food-rating">{rating}</p>
+            <p className="food-review-count">({review_count} reviews)</p>
+          </div>
+        </div>
         <p className="food-phone">Phone: {phone}</p>
         <p className="food-price">Price: {price}</p>
-        <p className="food-rating">Rating: {rating}</p>
-        <p className="food-review-count">Reviews: {review_count}</p>
         <p className="food-status">
           Currently {is_closed ? 'Closed' : 'Open'}
         </p>

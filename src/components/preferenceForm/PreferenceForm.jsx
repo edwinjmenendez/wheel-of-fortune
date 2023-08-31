@@ -3,7 +3,7 @@ import axios, { all } from 'axios';
 import './PreferenceForm.css'; // Import your CSS file for styling
 import { Link, useNavigate, } from 'react-router-dom';
 
-const PreferenceForm = ({ setFoodData }) => {
+const PreferenceForm = ({ setFoodData, foodData }) => {
 
     const navigate = useNavigate();
 
@@ -42,6 +42,7 @@ const PreferenceForm = ({ setFoodData }) => {
     };
 
     const addFood = () => {
+        if (allFoods.length > 4 || !foodCraving) return;
         const updatedData = [...allFoods];
         updatedData.push(foodCraving);
         setAllFoods(updatedData)
@@ -64,12 +65,17 @@ const PreferenceForm = ({ setFoodData }) => {
                     allFoods,
                     budget
                 }));
-                navigate('wheel')
+                localStorage.setItem('foodData', JSON.stringify({
+                    ...foodData,
+                    allFoods,
+                    budget
+                }));
+                navigate('wheel');
             } else {
-                alert('Fill out required fields')
+                alert('Fill out required fields');
             }
         } catch (error) {
-            console.error({error})  
+            console.error({ error })
         }
     };
 
@@ -89,7 +95,7 @@ const PreferenceForm = ({ setFoodData }) => {
                     long
                 }
             }));
-            
+
         } catch (error) {
             console.error('Error getting location:', error);
         }
@@ -97,9 +103,10 @@ const PreferenceForm = ({ setFoodData }) => {
 
     return (
         <div className="form-container">
-            <h2>Food Craving Form</h2>
+            <h2>Customize Your Food Experience</h2>
+            <p className='p-header'>Please fill the form below to create your personalized food selection and discover the perfect dining options that match your cravings and budget.</p>
             <form onSubmit={handleSubmit}>
-                <label htmlFor="foodCraving">What foods are you craving? (Type at LEAST 2 foods)</label>
+            <label htmlFor="foodCraving">Enter the foods you're craving (at least 2):</label>
                 <div className='foodCravingInputandButton' >
                     <input
                         type="text"
@@ -133,7 +140,7 @@ const PreferenceForm = ({ setFoodData }) => {
                     ))}
                 </div>
 
-                <label className='budgetLabel' htmlFor="budget">How much do you want to spend?</label>
+                <label className='budgetLabel' htmlFor="budget">Select your expense preference:</label>
                 <select id="budget" value={budget.value} onChange={handleBudgetChange}>
                     <option value="">Select budget</option>
                     <option value="$">$</option>
@@ -141,7 +148,7 @@ const PreferenceForm = ({ setFoodData }) => {
                     <option value="$$$">$$$</option>
                     <option value="$$$$">$$$$</option>
                 </select>
-                    <button type="submit">Submit</button>
+                <button type="submit">Submit</button>
             </form>
         </div>
     );

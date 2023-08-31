@@ -1,8 +1,12 @@
 .food-container {
-    border: 1px solid #ddd;
-    padding: 10px;
+    margin: 10px 10px;
+    padding: 10px 20px;
     margin-bottom: 20px;
     display: flex;
+    align-items: center;
+    width: 500px;
+    background-color: rgba(240, 248, 255, 0.575);
+    border-radius: 20px;
   }
   
   .food-image-link {
@@ -10,9 +14,10 @@
   }
   
   .food-image {
-    width: 100%;
-    max-height: 150px;
+    width: 200px;
+    height: 200px;
     object-fit: cover;
+    border-radius: 10px;
   }
   
   .food-details {
@@ -40,3 +45,17 @@
     margin: 0;
   }
   
+  .StarIcon {
+    color: 'red';
+  }
+
+  .review-rating-star {
+    display: flex;
+    align-items: center;
+  }
+
+  .review-rating {
+    margin-left: 10px;
+    display: flex;
+    column-gap: 5px;
+  }
