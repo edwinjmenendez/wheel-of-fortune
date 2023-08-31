@@ -16,6 +16,7 @@ const Food = ({ business }) => {
 
   const {
     id,
+    display_phone,
     image_url,
     is_closed,
     location,
@@ -30,11 +31,11 @@ const Food = ({ business }) => {
   const { address1, city, state, zip_code } = location;
   const ratingStars = [];
   for (let i = 0; i < 5; i++) {
-    ratingStars.push(<StarIcon color={i < Math.floor(rating) ? 'primary' : ''} className={classes.customStarColor}/>)
+    ratingStars.push(<StarIcon key={`star${i}`} color={i < Math.floor(rating) ? 'primary' : ''} className={classes.customStarColor}/>)
   }
 
   return (
-    <div className="food-container" id={id}>
+    <div className="food-container" key={id}>
       <a className="food-image-link" href={url}>
         <img className="food-image" src={image_url} alt={name} />
       </a>
@@ -49,7 +50,7 @@ const Food = ({ business }) => {
             <p className="food-review-count">({review_count} reviews)</p>
           </div>
         </div>
-        <p className="food-phone">Phone: {phone}</p>
+        <p className="food-phone">Phone: {display_phone || phone}</p>
         <p className="food-price">Price: {price}</p>
         <p className="food-status">
           Currently {is_closed ? 'Closed' : 'Open'}

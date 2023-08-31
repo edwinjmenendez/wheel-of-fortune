@@ -36,7 +36,7 @@ const FoodList = ({ foodSelection }) => {
     return (
         <div className='food-list'>
             {data ? data.map(business => (
-                <Food business={business} />
+                <Food key={business.id} business={business} />
             )) :
             <p>Loading Data . . .</p>
             }

@@ -39,10 +39,6 @@ const Wheel = ({ foodData, setFoodSelection }) => {
         navigate('/foodlist');
     }
 
-    useEffect(() => {
-        console.log('hasspun in useEffect:', hasSpun);
-    }, [hasSpun]);
-
     return (
         <div className='wheel-container'>
             <h1>Give the Wheel a Spin</h1>

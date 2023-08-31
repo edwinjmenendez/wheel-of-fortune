@@ -7,6 +7,12 @@
     width: 500px;
     background-color: rgba(240, 248, 255, 0.575);
     border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Starting with a subtle box shadow */
+    transition: box-shadow 0.3s ease-in-out; /* Adding transition for box-shadow */
+  }
+  
+  .food-container:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Making the box shadow more prominent on hover */
   }
   
   .food-image-link {
