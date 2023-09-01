@@ -93,7 +93,7 @@ const PreferenceForm = ({ setFoodData, foodData }) => {
     const getLocation = () => new Promise((resolve, reject) =>
         navigator.geolocation.getCurrentPosition(resolve, reject)
     );
-    
+
     const handleGetLocation = async () => {
         try {
             const position = await getLocation();
@@ -118,7 +118,7 @@ const PreferenceForm = ({ setFoodData, foodData }) => {
                         autoComplete='off'
                         disabled={allFoods.length > 4 ? true : false}
                     />
-                    <button type='button' onClick={addFood} className='enterFoodButton' id='foodCraving' >Enter food</button>
+                    <button type='button' onClick={addFood} className='enterFoodButton' id='foodCraving' >Enter</button>
                 </div>
                 <div className='suggestionsContainer'>
                     <ul className='suggestionsList'>
