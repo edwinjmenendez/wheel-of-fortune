@@ -1,4 +1,4 @@
-# Wheel of Fortune App
+# Foodie Roulette
 
 The **Wheel of Fortune App** is a fun and interactive application that helps you decide what to eat when you're feeling indecisive. This app leverages Yelp's API to provide you with restaurant recommendations based on your food preferences, budget, and location.
 
