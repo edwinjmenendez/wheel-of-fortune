@@ -10,7 +10,6 @@
   }
 
   .wheel-container h1 {
-    margin-left: -300px;
     color: #333;
     font-size: 35px;
     background-color: wheat;
@@ -25,6 +24,7 @@
   }
 
   #wheel {
+    margin-top: 50px;
     width: 600px;
     display: flex;
     align-items: center;
@@ -60,7 +60,8 @@
     width: 100%;
   }
   .wheel-container h1 {
-    font-size: 100%;
+    font-size: 20px;
+
   }
 }
 
@@ -76,14 +77,13 @@
     width: 100%;
   }
 
-  .wheel-container button {
-    margin-left: 150px;
+  .wheel-container h1 {
+    display: none;
   }
 
-  .wheel-container h1 {
-    margin-left: 10px;
-    color: #333;
-    font-size: 100%;
+  .wheel-container button {
+    margin-top: 50px;
+    margin-left: 20%;
   }
 
   #canvas {

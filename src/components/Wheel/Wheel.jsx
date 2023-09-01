@@ -41,6 +41,10 @@ const Wheel = ({ foodData, setFoodSelection }) => {
     return (
         <div className='wheel-container'>
             <h1>Take the Wheel for a Spin (One Spin Only)</h1>
+            {hasSpun && <button
+                onClick={handleClick}>
+                See Results
+            </button>}
             <WheelComponent
                 segments={foodData.allFoods}
                 segColors={segColors}
@@ -55,10 +59,6 @@ const Wheel = ({ foodData, setFoodSelection }) => {
                 downDuration={1000}
                 fontFamily='Arial'
             />
-            {hasSpun && <button
-                onClick={handleClick}>
-                See Results
-            </button>}
         </div>
     );
 };

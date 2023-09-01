@@ -48,7 +48,9 @@ const Food = ({ business }) => {
           <a href={url}>{name}</a>
         </h2>
         <div className='review-rating-star'>
+        <div className='stars'>
           {ratingStars}
+        </div>
           <div className='review-rating'>
             <p className="food-rating">{rating}</p>
             <p className="food-review-count">({review_count} reviews)</p>

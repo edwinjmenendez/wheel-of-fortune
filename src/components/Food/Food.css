@@ -14,7 +14,7 @@
   .food-container:hover {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Making the box shadow more prominent on hover */
   }
-  
+
   .food-image-link {
     flex: 0 0 150px;
   }
@@ -64,4 +64,21 @@
     margin-left: 10px;
     display: flex;
     column-gap: 5px;
+  }
+
+  @media (max-width: 576px) {
+    .food-image {
+      width: 150px;
+      height: 150px;
+    }
+
+    .review-rating-star {
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+    }
+
+    .review-rating {
+      margin-left: 0px;
+    }
   }
