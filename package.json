@@ -9,7 +9,8 @@
     "build-dev": "webpack --mode development",
     "build-prod": "webpack --mode production",
     "start": "webpack serve --mode development",
-    "start:server": "nodemon server/server.js"
+    "start:server": "nodemon server/server.js",
+    "build": "webpack"
   },
   "keywords": [],
   "author": "",
