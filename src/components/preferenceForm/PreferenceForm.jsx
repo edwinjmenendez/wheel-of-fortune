@@ -18,7 +18,7 @@ const PreferenceForm = ({ setFoodData, foodData }) => {
 
         if (newValue.length >= 3) {
             try {
-                const response = await axios.get(' http://localhost:3001/autocomplete', {
+                const response = await axios.get('/autocomplete', {
                     params: {
                         text: newValue,
                     },
@@ -43,32 +43,43 @@ const PreferenceForm = ({ setFoodData, foodData }) => {
 
     const addFood = () => {
         if (allFoods.length > 4 || !foodCraving) return;
-        const updatedData = [...allFoods];
-        updatedData.push(foodCraving);
+        const updatedData = [...allFoods, foodCraving];
         setAllFoods(updatedData)
         setFoodCraving('');
+        setSuggestions([]);
     }
 
     const handleSuggestions = (suggestion) => {
-        setFoodCraving(suggestion);
+        const updatedData = [...allFoods, suggestion];
+        setAllFoods(updatedData);
         setSuggestions([]);
+        setFoodCraving('');
     }
 
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            await handleGetLocation();
+            const position = await handleGetLocation();
+            const { latitude: lat, longitude: long } = position.coords;
             if (allFoods.length > 1 && budget) {
                 setFoodData(prevData => ({
                     ...prevData,
                     allFoods,
-                    budget
+                    budget,
+                    location: {
+                        lat,
+                        long
+                    }
                 }));
                 localStorage.setItem('foodData', JSON.stringify({
                     ...foodData,
                     allFoods,
-                    budget
+                    budget,
+                    location: {
+                        lat,
+                        long
+                    }
                 }));
                 navigate('wheel');
             } else {
@@ -82,20 +93,11 @@ const PreferenceForm = ({ setFoodData, foodData }) => {
     const getLocation = () => new Promise((resolve, reject) =>
         navigator.geolocation.getCurrentPosition(resolve, reject)
     );
-
-    // Usage
+    
     const handleGetLocation = async () => {
         try {
             const position = await getLocation();
-            const { latitude: lat, longitude: long } = position.coords;
-            setFoodData(prevData => ({
-                ...prevData,
-                location: {
-                    lat,
-                    long
-                }
-            }));
-
+            return position;
         } catch (error) {
             console.error('Error getting location:', error);
         }
@@ -106,7 +108,7 @@ const PreferenceForm = ({ setFoodData, foodData }) => {
             <h2>Customize Your Food Experience</h2>
             <p className='p-header'>Please fill the form below to create your personalized food selection and discover the perfect dining options that match your cravings and budget.</p>
             <form onSubmit={handleSubmit}>
-            <label htmlFor="foodCraving">Enter the foods you're craving (at least 2):</label>
+                <label htmlFor="foodCraving">Enter the foods you're craving (at least 2):</label>
                 <div className='foodCravingInputandButton' >
                     <input
                         type="text"
