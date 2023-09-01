@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Route, Routes, Outlet, Link } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Wheel from './components/Wheel/Wheel'; // Import your Wheel component
 import PreferenceForm from './components/preferenceForm/PreferenceForm';
 import FoodList from './components/foodlist/FoodList';
@@ -24,6 +24,7 @@ const App = () => {
                     <Route path='wheel' element={<Wheel setFoodSelection={setFoodSelection} foodData={foodData} />} />
                 ) : null}
                 <Route path='foodlist' element={<FoodList foodSelection={foodSelection} />} />
+                <Route path='*' element={<div className='page-not-found' >The requested page is not found. 404 Error.</div>} />
             </Routes>
         </div>
     );

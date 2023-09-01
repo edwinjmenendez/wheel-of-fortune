@@ -9,7 +9,7 @@ const FoodList = ({ foodSelection }) => {
 
     const getResults = async (foodSel) => {
         try {
-            const repsonse = await axios.get('http://localhost:3001/results', {
+            const repsonse = await axios.get('/results', {
                 params: {
                     term: foodSel.food,
                     longitude: foodSel.location.long,

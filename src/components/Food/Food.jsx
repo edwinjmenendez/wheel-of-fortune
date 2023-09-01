@@ -31,7 +31,11 @@ const Food = ({ business }) => {
   const { address1, city, state, zip_code } = location;
   const ratingStars = [];
   for (let i = 0; i < 5; i++) {
-    ratingStars.push(<StarIcon key={`star${i}`} color={i < Math.floor(rating) ? 'primary' : ''} className={classes.customStarColor}/>)
+    ratingStars.push(
+      <StarIcon
+        key={`star${i}`}
+        color={i < Math.floor(rating) ? 'primary' : 'inherit'}
+        className={classes.customStarColor}/>)
   }
 
   return (

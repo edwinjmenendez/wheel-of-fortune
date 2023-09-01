@@ -15,7 +15,6 @@ const Wheel = ({ foodData, setFoodSelection }) => {
         '#34A24F'
     ];
 
-    // Initialize the answer state with a default value
     const [answer, setAnswer] = useState('');
     const [hasSpun, setHasSpun] = useState(false);
 
@@ -41,7 +40,7 @@ const Wheel = ({ foodData, setFoodSelection }) => {
 
     return (
         <div className='wheel-container'>
-            <h1>Give the Wheel a Spin</h1>
+            <h1>Take the Wheel for a Spin (One Spin Only)</h1>
             <WheelComponent
                 segments={foodData.allFoods}
                 segColors={segColors}

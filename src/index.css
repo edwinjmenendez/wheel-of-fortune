@@ -8,3 +8,7 @@ body {
     background-repeat: repeat; /* Repeat the pattern */
   }
   
+  .page-not-found {
+    font-size: 50px;
+    text-align: center;
+  }
